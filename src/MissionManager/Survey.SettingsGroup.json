@@ -21,4 +21,23 @@
     "type":             "bool",
     "defaultValue":     false
 }
+,
+{
+    "name":             "OptimumSweepDir",
+    "shortDescription": "Finds Optimum Sweep Direction.",
+    "type":             "bool",
+    "defaultValue":     false
+},
+{
+    "name":             "Partition",
+    "shortDescription": "partition.",
+    "type":             "bool",
+    "defaultValue":     false
+},
+{
+    "name":             "Switchpa",
+    "shortDescription": "switching between the paths of the drones.",
+    "type":             "bool",
+    "defaultValue":     false
+}
 ]

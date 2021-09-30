@@ -29,13 +29,25 @@ public:
     Q_PROPERTY(Fact* gridAngle              READ gridAngle              CONSTANT)
     Q_PROPERTY(Fact* flyAlternateTransects  READ flyAlternateTransects  CONSTANT)
     Q_PROPERTY(Fact* splitConcavePolygons   READ splitConcavePolygons   CONSTANT)
+    Q_PROPERTY(Fact* switchpa               READ switchpa   CONSTANT)
+    Q_PROPERTY(Fact* partition              READ partition   CONSTANT)
+    Q_PROPERTY(Fact* optimumSweepDir        READ optimumSweepDir   CONSTANT)
 
     Fact* gridAngle             (void) { return &_gridAngleFact; }
     Fact* flyAlternateTransects (void) { return &_flyAlternateTransectsFact; }
     Fact* splitConcavePolygons  (void) { return &_splitConcavePolygonsFact; }
+    Fact* switchpa              (void) { return &_switchpaFact; }
+    Fact* partition             (void) { return &_partitionFact; }
+  Fact* optimumSweepDir  (void) { return &_optimumSweepDirFact; }
+
 
     Q_INVOKABLE void rotateEntryPoint(void);
 
+  Q_INVOKABLE void switchPath(void);
+
+
+  int OptimumSweepDiameterFunction(QList<QPointF> a, int n);
+  QList<QLineF> TransectsModification(QList<QLineF> , int , int );
     // Overrides from ComplexMissionItem
     bool    load                (const QJsonObject& complexObject, int sequenceNumber, QString& errorString) final;
     QString mapVisualQML        (void) const final { return QStringLiteral("SurveyMapVisual.qml"); }
@@ -73,7 +85,9 @@ public:
     static const char* gridEntryLocationName;
     static const char* flyAlternateTransectsName;
     static const char* splitConcavePolygonsName;
-
+    static const char* switchpaName;
+    static const char* partitionName;
+    static const char* optimumSweepDirName;
     static const char* jsonV3ComplexItemTypeValue;
 
 signals:
@@ -94,6 +108,7 @@ private:
     };
 
     QPointF _rotatePoint(const QPointF& point, const QPointF& origin, double angle);
+
     void _intersectLinesWithRect(const QList<QLineF>& lineList, const QRectF& boundRect, QList<QLineF>& resultLines);
     void _intersectLinesWithPolygon(const QList<QLineF>& lineList, const QPolygonF& polygon, QList<QLineF>& resultLines);
     void _adjustLineDirection(const QList<QLineF>& lineList, QList<QLineF>& resultLines);
@@ -123,7 +138,7 @@ private:
     void _rebuildTransectsPhase1WorkerSinglePolygon(bool refly);
     void _rebuildTransectsPhase1WorkerSplitPolygons(bool refly);
     /// Adds to the _transects array from one polygon
-    void _rebuildTransectsFromPolygon(bool refly, const QPolygonF& polygon, const QGeoCoordinate& tangentOrigin, const QPointF* const transitionPoint);
+    void _rebuildTransectsFromPolygon(QList<QLineF> resultLines, const QGeoCoordinate& tangentOrigin, const QPointF* const transitionPoint, const QPointF* const transitionPoint2);
     // Decompose polygon into list of convex sub polygons
     void _PolygonDecomposeConvex(const QPolygonF& polygon, QList<QPolygonF>& decomposedPolygons);
     // return true if vertex a can see vertex b
@@ -133,14 +148,22 @@ private:
     QMap<QString, FactMetaData*> _metaDataMap;
 
     SettingsFact    _gridAngleFact;
+
     SettingsFact    _flyAlternateTransectsFact;
+
     SettingsFact    _splitConcavePolygonsFact;
+    SettingsFact    _switchpaFact;
+    SettingsFact    _partitionFact;
+    SettingsFact    _optimumSweepDirFact;
     int             _entryPoint;
 
     static const char* _jsonGridAngleKey;
     static const char* _jsonEntryPointKey;
     static const char* _jsonFlyAlternateTransectsKey;
     static const char* _jsonSplitConcavePolygonsKey;
+    static const char* _jsonSwitchpaKey;
+    static const char* _jsonPartitionKey;
+    static const char* _jsonOptimumSweepDirKey;
 
     static const char* _jsonV3GridObjectKey;
     static const char* _jsonV3GridAltitudeKey;
