@@ -26,23 +26,21 @@ Key Links:
 * [License](https://github.com/mavlink/qgroundcontrol/blob/master/COPYING.md)
 
 
-# SmartSurvey_QGC
+# FLAIR: Smart Survey in QGC
 
 
-
-**1. QGroundControl**
 
 This work is an extension of QGroundControl that provides some additional features in QGControl to optimize the drone trajectory and energy consumption.
 
 The list of additional features, their description and their use are mentioned on the [link](https://docs.google.com/presentation/d/1INAbxRJxul3wHkVudp6JSQHbo7yK59PzovAylaD3nAE/edit?usp=sharing).
 
 
-**2. Installation and Pre-requisites**
+**1. Installation and Pre-requisites**
 
 Please refer to QgroundControl [Github page](https://github.com/mavlink/qgroundcontrol) for installation instructions
 
 
-**3. How to Run**
+**2. How to Run**
 
 The files that are changed for adding these features are _SurveyComplexItem.cc_, _SurveyComplexItem.h_, _Survey.SettingsGroup.json_ in the **MissionManager** folder under src and the _SurveyItemEditor.qml_ file in **PlanView** folder under src. Compile the code on Qt after replacing these four files.
 
