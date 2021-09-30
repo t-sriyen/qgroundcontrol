@@ -24,7 +24,7 @@ Rectangle {
     //property real   availableWidth    ///< Width for control
     //property var    missionItem       ///< Mission Item for editor
 
-    property real   _margin:                    ScreenTools.defaultFontPixelWidth / 2
+    property real   _margin:                    ScreenTools.defaultFontPixelWidth/2
     property real   _fieldWidth:                ScreenTools.defaultFontPixelWidth * 10.5
     property var    _vehicle:                   QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
     property real   _cameraMinTriggerInterval:  missionItem.cameraCalc.minTriggerInterval.rawValue
@@ -196,12 +196,22 @@ Rectangle {
                 stepSize:               1
                 tickmarksEnabled:       false
                 Layout.fillWidth:       true
-                Layout.columnSpan:      2
+                Layout.columnSpan:      1
                 Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 1.5
                 onValueChanged:         missionItem.gridAngle.value = value
                 Component.onCompleted:  value = missionItem.gridAngle.value
                 updateValueWhileDragging: true
             }
+
+
+          FactCheckBox {
+                text:       qsTr("Optimum Sweep")
+                fact:       _optimumSweep
+                visible:    _optimumSweep.visible
+                property Fact _optimumSweep: missionItem.optimumSweepDir
+            }
+
+
 
             QGCLabel {
                 text:       qsTr("Turnaround dist")
@@ -214,6 +224,7 @@ Rectangle {
             }
         }
 
+
         QGCButton {
             text:               qsTr("Rotate Entry Point")
             onClicked:          missionItem.rotateEntryPoint();
@@ -225,15 +236,16 @@ Rectangle {
             spacing:        _margin
             visible:        transectsHeader.checked && !_usingPreset
 
-            /*
-              Temporarily removed due to bug https://github.com/mavlink/qgroundcontrol/issues/7005
+
+            //  Temporarily removed due to bug https://github.com/mavlink/qgroundcontrol/issues/7005
             FactCheckBox {
                 text:       qsTr("Split concave polygons")
                 fact:       _splitConcave
                 visible:    _splitConcave.visible
                 property Fact _splitConcave: missionItem.splitConcavePolygons
             }
-            */
+
+
 
             FactCheckBox {
                 text:               qsTr("Hover and capture image")
@@ -281,25 +293,22 @@ Rectangle {
             }
         }
 
-        SectionHeader {
-            id:         terrainHeader
-            text:       qsTr("Terrain")
-            checked:    missionItem.followTerrain
-            visible:    !_usingPreset
-        }
+
+
 
         ColumnLayout {
             anchors.left:   parent.left
             anchors.right:  parent.right
             spacing:        _margin
-            visible:        terrainHeader.checked && !_usingPreset
 
 
-            QGCCheckBox {
-                id:         followsTerrainCheckBox
-                text:       qsTr("Vehicle follows terrain")
-                checked:    missionItem.followTerrain
-                onClicked:  missionItem.followTerrain = checked
+
+            FactCheckBox {
+                id:        followsTerrainCheckBox
+                text:       qsTr("Partitioning")
+                fact:       _partitions
+                visible:    _partitions.visible
+                property Fact _partitions: missionItem.partition
             }
 
             GridLayout {
@@ -309,25 +318,62 @@ Rectangle {
                 columns:            2
                 visible:            followsTerrainCheckBox.checked
 
+                QGCLabel { text: qsTr("Number of UAVs") }
+                FactTextField {
+                    fact:               missionItem.NumberofUAVs
+                    Layout.fillWidth:   true
+                }
+
+                QGCButton {
+                    text:               qsTr("Switch")
+                    onClicked:          missionItem.switchPath();
+                }
+
+            }
+
+
+        }
+
+  /*      SectionHeader {
+            id:         terrainHeader
+            text:       qsTr("Terrain")
+            checked:    missionItem.followTerrain
+            visible:    !_usingPreset
+        }
+        ColumnLayout {
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            spacing:        _margin
+            visible:        terrainHeader.checked && !_usingPreset
+            QGCCheckBox {
+                id:         followsTerrainCheckBox
+                text:       qsTr("Vehicle follows terrain")
+                checked:    missionItem.followTerrain
+                onClicked:  missionItem.followTerrain = checked
+            }
+            GridLayout {
+                Layout.fillWidth:   true
+                columnSpacing:      _margin
+                rowSpacing:         _margin
+                columns:            2
+                visible:            followsTerrainCheckBox.checked
                 QGCLabel { text: qsTr("Tolerance") }
                 FactTextField {
                     fact:               missionItem.terrainAdjustTolerance
                     Layout.fillWidth:   true
                 }
-
                 QGCLabel { text: qsTr("Max Climb Rate") }
                 FactTextField {
-                    fact:               missionItem.terrainAdjustMaxClimbRate
+                    fact:               missionItem.NumberofUAVs
                     Layout.fillWidth:   true
                 }
-
                 QGCLabel { text: qsTr("Max Descent Rate") }
                 FactTextField {
                     fact:               missionItem.terrainAdjustMaxDescentRate
                     Layout.fillWidth:   true
                 }
             }
-        }
+        }*/
 
         SectionHeader {
             id:     statsHeader
